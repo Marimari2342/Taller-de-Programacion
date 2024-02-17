@@ -1,0 +1,35 @@
+programa CompetenciaSinFiscalizador
+procesos 
+  proceso juntarFlorEsquina(ES cantFlores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  proceso juntarFlorAvenida (ES cantFlores:numero)
+  comenzar
+    repetir 9
+      juntarFlorEsquina(cantFlores)
+      mover
+    juntarFlorEsquina(cantFlores)
+  fin
+areas 
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+robots
+  robot tipoUno
+  variables
+    cantFlores:numero
+  comenzar
+    cantFlores:=0
+    juntarFlorAvenida(cantFlores)
+    Informar(cantFlores)
+  fin
+variables
+  robot1,robot2:tipoUno
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,11)
+fin    

@@ -1,0 +1,82 @@
+programa Carrera
+procesos
+  proceso buscarPapel(E avIn:numero;E caIn:numero;ES hay:numero)
+  comenzar
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    si HayPapelEnLaEsquina
+      tomarPapel
+    sino
+      hay:= 0
+    Pos(avIn,caIn)
+    LiberarEsquina(11,11)
+  fin
+areas
+  areaR1:AreaP(4,1,4,100)
+  areaR2:AreaP(6,1,6,100)
+  areaR3:AreaP(8,1,8,100)
+  areaR4:AreaP(10,1,10,100)
+  fuente:AreaPC(11,11,11,11)
+  areaArb:AreaP(1,1,1,1)
+robots
+  robot corredor
+  variables
+    hay:numero
+    id:numero
+  comenzar
+    hay:=1
+    RecibirMensaje(id,arbitro)
+    mientras (hay=1) & (PosCa<100)
+      buscarPapel(PosAv,PosCa,hay)
+      si (hay=1)
+        depositarPapel
+        mover
+      sino
+        EnviarMensaje(id,arbitro)
+        EnviarMensaje(PosCa,arbitro)
+  fin
+  robot coordinador
+  variables
+    rbt,pos,max,maxR:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    max:=0
+    repetir 4 
+      RecibirMensaje(rbt,*)
+      si rbt=1
+        RecibirMensaje(pos,r1)
+      sino
+        si rbt=2
+          RecibirMensaje(pos,r2)
+        sino
+          si rbt=3
+            RecibirMensaje(pos,r3)
+          sino
+            RecibirMensaje(pos,r4)
+      si pos>max
+        max:=pos
+        maxR:=rbt
+    Informar('robotGanador ',maxR)
+  fin
+variables
+  r1,r2,r3,r4:corredor
+  arbitro:coordinador
+comenzar
+  AsignarArea(r1,areaR1)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r3,areaR3)
+  AsignarArea(r4,areaR4)
+  AsignarArea(r1,fuente)
+  AsignarArea(r2,fuente)
+  AsignarArea(r3,fuente)
+  AsignarArea(r4,fuente)
+  AsignarArea(arbitro,areaArb)
+  Iniciar(arbitro,1,1)
+  Iniciar(r1,4,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,8,1)
+  Iniciar(r4,10,1)
+fin

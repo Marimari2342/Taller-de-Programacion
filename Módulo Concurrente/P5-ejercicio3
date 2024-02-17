@@ -1,0 +1,86 @@
+programa Recolectores
+procesos
+  proceso juntarCosechador(ES cant:numero)
+  comenzar
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant:=cant+1
+    Pos(1,5)
+    LiberarEsquina(10,10)
+  fin
+  proceso juntarFlorEsquina(ES cant:numero)
+  comenzar
+    mientras(cant<10)&(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant+1
+  fin
+  proceso depositarEnDiez(E cant:numero)
+  variables
+    inCa,inAv:numero
+  comenzar
+    inCa:=PosCa
+    inAv:=PosAv
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    repetir cant
+      depositarFlor
+    Pos(inAv,inCa)
+    LiberarEsquina(10,10)
+  fin
+  proceso recorroEtapa(ES cant:numero)
+  variables
+    esq:numero
+  comenzar
+    esq:=0
+    mientras(cant<10)&(esq<5)&(PosAv<100)
+      juntarFlorEsquina(cant)
+      si (cant<10)&(PosAv<100)
+        mover
+        esq:=esq+1
+    depositarEnDiez(cant)
+  fin
+areas
+  areaR1:AreaP(1,3,100,3)
+  areaR2:AreaP(1,4,100,4)
+  area10:AreaC(10,10,10,10)
+  areaCos:AreaP(1,5,1,5)
+robots
+  robot recolector
+  variables
+    cant:numero
+  comenzar
+    derecha
+    mientras PosAv<100
+      cant:=0
+      recorroEtapa(cant)
+      EnviarMensaje(0,cosecha)
+    EnviarMensaje(1,cosecha)
+  fin
+  robot cosechador
+  variables
+    cant,ok,aux:numero
+  comenzar
+    cant:=0
+    ok:=0
+    mientras ok<>2
+      RecibirMensaje(aux,*)
+      juntarCosechador(cant)
+      ok:=ok+aux
+    Informar('cantidadFlores ',cant)
+  fin
+variables
+  r1,r2:recolector
+  cosecha:cosechador
+comenzar
+  AsignarArea(r1,areaR1)
+  AsignarArea(r2,areaR2)
+  AsignarArea(cosecha,areaCos)
+  AsignarArea(r1,area10)
+  AsignarArea(r2,area10)
+  AsignarArea(cosecha,area10)
+  Iniciar(r1,1,3)
+  Iniciar(r2,1,4)
+  Iniciar(cosecha,1,5)
+fin

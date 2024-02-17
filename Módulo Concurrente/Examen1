@@ -1,0 +1,80 @@
+programa Cuadrados
+procesos
+  proceso juntarFlorEsquina(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant:=cant+1
+  fin
+  proceso recorrerCuadrado(E long:numero;ES cant:numero)
+  comenzar
+    repetir 4
+      repetir long
+        juntarFlorEsquina(cant)
+        mover
+      derecha
+    Pos(PosAv,PosCa+long+1)
+  fin
+  proceso depositarFlores50(E cant:numero)
+  variables
+    inAv,inCa:numero
+  comenzar
+    inAv:=PosAv
+    inCa:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir cant
+      depositarFlor
+    Pos(inAv,inCa)
+    LiberarEsquina(50,50)
+  fin
+areas
+  areaCuadrados:AreaPC(1,1,25,30)
+  areaJefe:AreaP(51,1,51,1)
+  area50:AreaPC(50,50,50,50)
+robots
+  robot florero
+  variables
+    id,cant,long,ok:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    cant:=0
+    repetir 5
+      Random(long,1,5)
+      recorrerCuadrado(long,cant)
+      si id=1
+        EnviarMensaje(0,r2)
+        EnviarMensaje(0,r3)
+      sino
+        si id=2
+          EnviarMensaje(0,r1)
+          EnviarMensaje(0,r3)
+        sino
+          EnviarMensaje(0,r1)
+          EnviarMensaje(0,r2)
+      repetir 2
+        RecibirMensaje(ok,*)    
+    depositarFlores50(cant)  
+  fin
+  robot coordinador
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+variables
+  r1,r2,r3:florero
+  jefe:coordinador
+comenzar
+  AsignarArea(r1,area50)
+  AsignarArea(r2,area50)
+  AsignarArea(r3,area50)
+  AsignarArea(r1,areaCuadrados)
+  AsignarArea(r2,areaCuadrados)
+  AsignarArea(r3,areaCuadrados)
+  AsignarArea(jefe,areaJefe)
+  Iniciar(r1,1,1)
+  Iniciar(r2,8,1)
+  Iniciar(r3,15,1)
+  Iniciar(jefe,51,1)
+fin

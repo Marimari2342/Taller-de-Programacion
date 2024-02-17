@@ -1,0 +1,87 @@
+programa Equipos
+procesos
+  proceso juntarPapeles(ES cantP:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantP:=cantP+1
+  fin
+  proceso recorrerCalleP(E long:numero;ES cantP:numero)
+  comenzar
+    repetir long-1
+      juntarPapeles(cantP)
+      mover  
+    juntarPapeles(cantP)
+  fin
+  proceso juntarFlores(ES cantF:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantF:=cantF+1
+  fin
+  proceso recorrerCalleF(E long:numero;ES cantF:numero)
+  comenzar
+    repetir long-1
+      juntarFlores(cantF)
+      mover
+    juntarFlores(cantF)
+  fin
+areas
+  areaA:AreaPC(1,1,20,1)
+  areaB:AreaPC(1,5,20,5)
+robots
+  robot tipoA1
+  variables
+    cantP:numero
+  comenzar
+    derecha
+    cantP:=0
+    recorrerCalleP(10,cantP)
+    EnviarMensaje(cantP,a2)
+  fin
+  robot tipoA2
+  variables
+    cantP,aux:numero
+  comenzar
+    derecha
+    cantP:=0
+    RecibirMensaje(aux,a1)
+    recorrerCalleP(10,cantP)
+    aux:=aux+cantP
+    Informar('cantidadTotalPapeles ',aux)
+  fin
+  robot tipoB1
+  variables
+    cantF:numero
+  comenzar
+    derecha
+    cantF:=0
+    recorrerCalleF(10,cantF)
+    EnviarMensaje(cantF,b2)
+  fin
+  robot tipoB2
+  variables
+    cantF,aux:numero
+  comenzar
+    derecha
+    cantF:=0
+    RecibirMensaje(aux,b1)
+    recorrerCalleF(10,cantF)
+    aux:=aux+cantF
+    Informar('cantidadTotalFlores ',aux)
+  fin
+variables
+  a1:tipoA1
+  a2:tipoA2
+  b1:tipoB1
+  b2:tipoB2
+comenzar
+  AsignarArea(a1,areaA)
+  AsignarArea(a2,areaA)
+  AsignarArea(b1,areaB)
+  AsignarArea(b2,areaB)
+  Iniciar(a1,1,1)
+  Iniciar(a2,11,1)
+  Iniciar(b1,1,5)
+  Iniciar(b2,11,5)
+fin

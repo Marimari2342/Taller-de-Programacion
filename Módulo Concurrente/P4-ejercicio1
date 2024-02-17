@@ -1,0 +1,107 @@
+programa ClienteServidor
+procesos 
+  proceso irYJUntar
+  comenzar
+    BloquearEsquina(PosAv,PosCa+1)
+    Pos(PosAv,PosCa+1)
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+    Pos(PosAv,PosCa-1)
+    LiberarEsquina(PosAv,PosCa+1)
+  fin
+  proceso avanzarDejandoFlores  
+  comenzar
+    mientras (HayFlorEnLaBolsa) & (PosCa<100)
+      depositarFlor
+      mover
+  fin
+  proceso dejarFlores(E av:numero;E ca:numero;E cant:numero)
+  comenzar
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    repetir cant
+      depositarFlor
+    Pos(100,100)
+    LiberarEsquina(av,ca)
+  fin
+areas
+  area1:AreaPC(1,1,1,100)
+  area2:AreaPC(2,1,2,100)
+  area3:AreaPC(3,1,3,100)
+  areaSer:AreaP(100,100,100,100)
+robots
+  robot servidor
+  variables
+    id,cantTer,cantF,av,ca:numero
+  comenzar
+    cantTer:=0
+    EnviarMensaje(1,cliUno)
+    EnviarMensaje(2,cliDos)
+    EnviarMensaje(3,cliTres)
+    mientras cantTer<3  
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(cantF,cliUno)
+        si cantF<>0
+          RecibirMensaje(av,cliUno)
+          RecibirMensaje(ca,cliUno)
+          dejarFlores(av,ca,cantF)
+          EnviarMensaje(0,cliUno)
+        sino
+          cantTer:=cantTer+1
+      sino
+        si id=2
+          RecibirMensaje(cantF,cliDos)
+          si cantF<>0
+            RecibirMensaje(av,cliDos)
+            RecibirMensaje(ca,cliDos)
+            dejarFlores(av,ca,cantF)
+            EnviarMensaje(0,cliDos)
+          sino
+            cantTer:=cantTer+1
+        sino
+          RecibirMensaje(cantF,cliTres)
+          si cantF<>0
+            RecibirMensaje(av,cliTres)
+            RecibirMensaje(ca,cliTres)
+            dejarFlores(av,ca,cantF)
+            EnviarMensaje(0,cliTres)
+          sino
+            cantTer:=cantTer+1
+  fin
+  robot cliente
+  variables
+    cantF,id,ok,llegue:numero
+  comenzar
+    llegue:=1
+    RecibirMensaje(id,robotSer)
+    mientras (llegue<>0)
+      Random(cantF,1,4)
+      EnviarMensaje(id,robotSer)
+      EnviarMensaje(cantF,robotSer)
+      EnviarMensaje(PosAv,robotSer)
+      EnviarMensaje(PosCa,robotSer)
+      RecibirMensaje(ok,robotSer)
+      irYJuntar
+      avanzarDejandoFlores
+      si (PosCa=100)
+        llegue:=0
+        EnviarMensaje(id,robotSer)
+        EnviarMensaje(llegue,robotSer)
+  fin
+variables
+  robotSer:servidor
+  cliUno,cliDos,cliTres:cliente
+comenzar
+  AsignarArea(cliUno,area1)
+  AsignarArea(cliDos,area2)
+  AsignarArea(cliTres,area3)
+  AsignarArea(robotSer,area1)
+  AsignarArea(robotSer,area2)
+  AsignarArea(robotSer,area3)
+  AsignarArea(robotSer,areaSer)
+  Iniciar(cliUno,1,1)
+  Iniciar(cliDos,2,1)
+  Iniciar(cliTres,3,1)
+  Iniciar(robotSer,100,100)
+fin

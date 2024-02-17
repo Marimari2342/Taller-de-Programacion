@@ -1,0 +1,91 @@
+programa AreaCompartida
+procesos
+  proceso juntarFloresyPapeles(ES cosas:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cosas:=cosas+1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cosas:=cosas+1
+  fin
+areas
+  areaComp:AreaPC(25,25,75,75)
+  areaR1:AreaP(25,1,25,1)
+  areaR2:AreaP(30,1,30,1)
+  areaR3:AreaP(35,1,35,1)
+  areaR4:AreaP(40,1,40,1)
+  areaJefe:AreaP(1,1,1,1)
+robots
+  robot recolector
+  
+  robot jefe
+  variables
+    aux,aux2,cantR1,cantR2,cantR3,cantR4,max,rMax,id1,id2,id3,id4:numero
+  comenzar
+    id1:=1
+    id2:=2
+    id3:=3
+    id4:=4
+    EnviarMensaje(id1,r1)
+    EnviarMensaje(id2,r2)
+    EnviarMensaje(id3,r3)
+    EnviarMensaje(id4,r4)
+    cantR1:=0
+    cantR2:=0
+    cantR3:=0
+    cantR4:=0
+    repetir 10
+      Random(aux,1,4)
+      si aux=1
+        EnviarMensaje(0,r1)
+        RecibirMensaje(aux2,r1)
+        cantR1:=cantR1+aux2
+      sino
+        si aux=2
+          EnviarMensaje(0,r2)
+          RecibirMensaje(aux2,r2)
+          cantR2:=cantR2+aux2
+        sino
+          si aux=3
+            EnviarMensaje(0,r3)
+            RecibirMensaje(aux2,r3)
+            cantR3:=cantR3+aux2
+          sino
+            EnviarMensaje(0,r4)
+            RecibirMensaje(aux2,r4)
+            cantR4:=cantR4+aux2
+    max:=0
+    si max<cantR1
+      max:=cantR1
+      rMax:=id1
+    si max<cantR2
+      max:=cantR2
+      rMax:=id2
+    si max<cantR3
+      max:=cantR3
+      rMax:=id3
+    si max<cantR4
+      max:=cantR4
+      rMax:=id4
+    EnviarMensaje(0,)  
+variables
+  r1,r2,r3,r4:recolector
+  robotJefe:jefe
+comenzar
+  AsignarArea(r1,areaComp)
+  AsignarArea(r2,areaComp)
+  AsignarArea(r3,areaComp)
+  AsignarArea(r4,areaComp)
+  AsignarArea(r1,areaR1)
+  AsignarArea(r2,areaR2)
+  AsignarArea(r3,areaR3)
+  AsignarArea(r4,areaR4)
+  AsignarArea(robotJefe,areaJefe)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+  Iniciar(robotJefe,1,1)
+fin
+  

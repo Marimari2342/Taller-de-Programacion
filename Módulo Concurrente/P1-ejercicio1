@@ -1,0 +1,41 @@
+programa RecorroAvenidas
+procesos
+  proceso contarEsquinasSinFlor(ES esqSinFlor:numero)
+  comenzar
+    si (~HayFlorEnLaEsquina)
+      esqSinFlor:=esqSinFlor+1
+  fin
+  proceso sumarFloresEsquina(ES cantFlores:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  proceso RecorrerAvenida (E av:numero; ES cantFlores:numero; ES esqSinFlor:numero)
+  comenzar 
+    repetir 100
+      contarEsquinasSinFlor(esqSinFlor)
+      sumarFloresEsquina(cantFlores)
+      si PosCa<100
+        mover
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot robot1
+  variables
+    cantFlores,esqSinFlor:numero
+  comenzar
+    cantFlores:=0
+    esqSinFlor:=0
+    RecorrerAvenida(1,cantFlores,esqSinFlor)
+    Informar(cantFlores)
+    Informar(esqSinFlor)
+  fin
+variables
+  Rinfo:robot1
+comenzar
+  AsignarArea(Rinfo,ciudad)
+  Iniciar(Rinfo,1,1)
+fin
+  

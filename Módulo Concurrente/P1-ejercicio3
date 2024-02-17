@@ -1,0 +1,63 @@
+programa Escaleras
+procesos
+  proceso calcularFlorPapel(ES cantFlores:numero;ES cantPapeles:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantFlores:=cantFlores+1
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantPapeles:=cantPapeles+1
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+    mientras HayPapelEnLaBolsa
+      depositarPapel
+  fin
+  proceso ladoEscalon(E long:numero;ES cantFlores:numero; ES cantPapeles:numero)
+  comenzar
+    repetir long
+      calcularFlorPapel(cantFlores,cantPapeles)
+      mover
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso escalon(E long:numero;ES cantEsc:numero)
+  variables
+    cantFlores,cantPapeles:numero
+  comenzar
+    cantFlores:=0
+    cantPapeles:=0
+    ladoEscalon(long,cantFlores,cantPapeles)
+    derecha
+    ladoEscalon(long,cantFlores,cantPapeles)
+    izquierda
+    si(cantPapeles=cantFlores+1)
+      cantEsc:=cantEsc+1
+  fin
+areas
+  area1: AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    cantEsc,long:numero
+  comenzar
+    cantEsc:=0
+    long:=1
+    repetir 4
+      escalon(long,cantEsc)
+      long:=long*2
+    Informar(cantEsc)
+  fin
+variables
+  robot1,robot2,robot3:tipo1
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot3,area1)
+  Iniciar(robot1,12,14)
+  Iniciar(robot2,17,10)
+  Iniciar(robot3,22,6)
+fin

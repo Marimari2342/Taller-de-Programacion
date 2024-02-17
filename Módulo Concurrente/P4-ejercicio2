@@ -1,0 +1,100 @@
+programa ProductoresConsumidores
+procesos
+  proceso juntoCincoPapeles(ES ok:boolean)
+  variables
+    papel:numero
+  comenzar
+    papel:=0
+    mientras (papel<5) & (PosCa<100)
+      mientras (HayPapelEnLaEsquina) & (papel<5)
+        tomarPapel
+        papel:=papel+1
+      si papel<5  
+        mover
+    si PosCa=100
+      ok:= F
+  fin
+  proceso depositoEn50
+  variables
+    inAv,inCa:numero
+  comenzar
+    inAv:=PosAv
+    inCa:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir 5
+      depositarPapel
+    Pos(inAv,inCa)  
+    LiberarEsquina(50,50)
+  fin
+  proceso tomoPapel(ES cant:numero;E quiero:numero)
+  variables
+    inCa,inAv:numero
+  comenzar
+    inCa:=PosCa
+    inAv:=PosAv
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    mientras (cant<>quiero) & (HayPapelEnLaEsquina)
+      tomarPapel
+      cant:=cant+1
+    si (cant<>quiero)
+      repetir cant
+        depositarPapel
+    Pos(inAv,inCa)
+    LiberarEsquina(50,50)
+  fin
+  proceso depositoPapel(E num:numero)
+  comenzar
+    repetir num
+      depositarPapel
+  fin
+areas
+  areap1:AreaP(5,1,5,100)
+  areap2:AreaP(10,1,10,100)
+  area50:AreaC(50,50,50,50)
+  areaC1:AreaP(11,1,11,1)
+  areaC2:AreaP(12,1,12,1)
+robots
+  robot prod
+  variables
+    ok:boolean
+  comenzar
+    ok:= V
+    mientras ok
+      juntoCincoPapeles(ok)
+      si ok
+        depositoEn50
+  fin
+  robot cons
+  variables
+    cont,cant,quiero:numero
+  comenzar
+    cont:=0
+    mientras cont<>8
+      cant:=0
+      Random(quiero,2,5)
+      tomoPapel(cant,quiero)
+      si (cant=quiero)
+        depositoPapel(quiero)
+        cont:=0
+      sino
+        cont:=cont+1
+  fin
+variables
+  p1,p2:prod
+  c1,c2:cons
+comenzar
+  AsignarArea(p1,areap1)
+  AsignarArea(p1,area50)
+  AsignarArea(p2,areap2)
+  AsignarArea(p2,area50)
+  AsignarArea(c1,areaC1)
+  AsignarArea(c1,area50)
+  AsignarArea(c2,areaC2)
+  AsignarArea(c2,area50)
+  Iniciar(p1,5,1)
+  Iniciar(p2,10,1)
+  Iniciar(c1,11,1)
+  Iniciar(c2,12,1)
+fin

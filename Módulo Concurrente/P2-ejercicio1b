@@ -1,0 +1,51 @@
+programa CompetenciaConFiscalizador
+procesos 
+  proceso juntarFlorEsquina(ES cantFlores:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantFlores:=cantFlores+1
+  fin
+  proceso juntarFlorAvenida (ES cantFlores:numero)
+  comenzar
+    repetir 9
+      juntarFlorEsquina(cantFlores)
+      mover
+    juntarFlorEsquina(cantFlores)
+  fin
+areas 
+  area1:AreaP(1,1,1,10)
+  area2:AreaP(2,11,2,20)
+  area3:AreaP(2,1,2,1)
+robots
+  robot tipoUno
+  variables
+    cantFlores:numero
+  comenzar
+    cantFlores:=0
+    juntarFlorAvenida(cantFlores)
+    EnviarMensaje(cantFlores,robotJefe)
+  fin
+  robot tipoJefe
+  variables
+    cantFuno,cantFdos,dif:numero
+  comenzar
+    RecibirMensaje(cantFuno,*)
+    RecibirMensaje(cantFdos,*)
+    si(cantFuno>cantFdos)
+      dif:=cantFuno-cantFdos
+    sino
+      dif:=cantFdos-cantFuno
+    Informar(dif)
+  fin  
+variables
+  robot1,robot2:tipoUno
+  robotJefe:tipoJefe
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robotJefe,area3)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,11)
+  Iniciar(robotJefe,2,1)
+fin    

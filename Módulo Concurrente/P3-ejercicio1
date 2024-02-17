@@ -1,0 +1,80 @@
+programa JuntarPractica3
+procesos
+  proceso juntarFloresEsquina(ES cantF:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantF:=cantF+1
+  fin
+  proceso juntarPapelesEsquina(ES cantP:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantP:=cantP+1
+  fin
+areas
+  areaFlor:AreaPC (1,1,5,10)
+  areaPapel:AreaPC (6,1,10,9)
+  areaFin:AreaPC (6,10,10,10)
+robots
+  robot florero
+  variables
+    avIn,caIn,av,ca,cantF:numero
+  comenzar
+    avIn:=PosAv
+    caIn:=PosCa
+    cantF:=0
+    repetir 5
+      Random(av,1,5)
+      Random(ca,1,10)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarFloresEsquina(cantF)
+      Pos(avIn,caIn)
+      LiberarEsquina(av,ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    repetir cantF
+      depositarFlor
+    Pos(avIn,caIn)
+    LiberarEsquina(10,10)
+  fin
+  robot papelero 
+  variables
+    avIn,caIn,av,ca,cantP:numero
+  comenzar
+    avIn:=PosAv
+    caIn:=PosCa
+    cantP:=0
+    repetir 3
+      Random(av,6,10)
+      Random(ca,1,9)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarPapelesEsquina(cantP)
+      Pos(avIn,caIn)
+      LiberarEsquina(av,ca)
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    repetir cantP
+      depositarPapel
+    Pos(avIn,caIn)
+    LiberarEsquina(10,10)      
+  fin
+variables
+  florUno,florDos:florero
+  papelUno,papelDos:papelero
+comenzar
+  AsignarArea(florUno,areaFlor)
+  AsignarArea(florDos,areaFlor)
+  AsignarArea(papelUno,areaPapel)
+  AsignarArea(papelDos,areaPapel)
+  AsignarArea(florUno,areaFin)
+  AsignarArea(florDos,areaFin)
+  AsignarArea(papelUno,areaFin)
+  AsignarArea(papelDos,areaFin)
+  Iniciar(florUno,6,10)
+  Iniciar(florDos,7,10)
+  Iniciar(papelUno,8,10)
+  Iniciar(papelDos,9,10)
+fin

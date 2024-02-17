@@ -1,0 +1,69 @@
+programa Carrera
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso juntarFlorEsquina(ES cantF:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantF:=cantF+1
+  fin
+  proceso juntarPapelEsquina(ES cantP:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantP:=cantP+1
+  fin
+  proceso juntarFoP(E id:numero,ES cant:numero)
+  comenzar
+    si id=1
+      juntarFlorEsquina(cant)
+    sino
+      juntarPapelEsquina(cant)
+  fin
+  proceso escalonDer (E long:numero,E id:numero,ES cant:numero)
+  comenzar
+    repetir 2
+      juntarFoP(id,cant)
+      repetir long 
+        mover
+        derecha
+      izquierda
+  fin
+  proceso escalonIzq (E long:numero,E id:numero,ES cant:numero)
+  comenzar
+    repetir 2
+      juntarFoP(id,cant)
+      repetir long
+        mover
+        izquierda
+      derecha
+  fin    
+  proceso recorrerEscalonesIzq(E id:numero,ES cant:numero,E long:numero)
+  comenzar
+    repetir 4
+      escalonIzq(long,id,cant)
+      long:=long-1
+  fin
+  proceso recorrerEscalonesDer(E id:numero,ES cant:numero,E long:numero)
+  comenzar
+    repetir 4
+      escalorDer(long,id,cant)
+      long:=long-1
+  fin
+robots
+  robot robot1
+  variables
+  id,cant:numero
+  comenzar
+  cant:=0
+  recibirMensaje(id,robotJefe)
+  long:=5
+  recorrerEscalonesIzq(id,cant,long)
+  long:=2
+  recorrerEscalonesDer(id,cant,long)
+  fin  
+  

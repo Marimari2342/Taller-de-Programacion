@@ -1,0 +1,108 @@
+programa ExamenDos
+procesos
+  proceso recogerFlorEsquina(ES cant:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cant:=cant+1
+  fin
+  proceso recorroMitadCuadrado(ES cant:numero;E long:numero)
+  comenzar
+    repetir 2
+      repetir long
+        recogerFlorEsquina(cant)
+        mover
+      derecha
+    recogerFlorEsquina(cant)
+  fin
+  proceso depositarVeinte(E cant:numero)
+  variables
+    inAv,inCa:numero
+  comenzar
+    inAv:=PosAv
+    inCa:=PosCa
+    BloquearEsquina(20,20)
+    Pos(20,20)
+    repetir cant
+      depositarFlor
+    Pos(inAv,inCa)
+    LiberarEsquina(20,20)
+  fin
+areas
+  areaA:AreaPC(1,1,11,11)
+  areaB:AreaPC(13,1,23,11)
+  area20:AreaPC(20,20,20,20)
+  areaFiscal:AreaP(30,1,30,1)
+robots
+  robot recolector
+  variables
+    id,ok,cant:numero
+  comenzar
+    RecibirMensaje(id,fiscal)
+    cant:=0
+    si id>2
+      repetir 2
+        derecha
+      RecibirMensaje(ok,*)
+      recorroMitadCuadrado(cant,9)
+    sino
+      recorroMitadCuadrado(cant,10)
+      si id=1
+        EnviarMensaje(0,a2)
+      sino
+        si id=2
+          EnviarMensaje(0,b2)
+    depositarVeinte(cant)
+    EnviarMensaje(id,fiscal)
+    EnviarMensaje(cant,fiscal)
+  fin
+  robot fiscalizador
+  variables
+    aux,cantA,cantB,id:numero
+  comenzar
+    EnviarMensaje(1,a1)
+    EnviarMensaje(3,a2)
+    EnviarMensaje(2,b1)
+    EnviarMensaje(4,b2)
+    cantA:=0
+    cantB:=0
+    repetir 4
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(aux,a1)
+        cantA:=cantA+aux
+      sino 
+        si id=2
+          RecibirMensaje(aux,b1)
+          cantB:=cantB+aux
+        sino
+          si id=3
+            RecibirMensaje(aux,a2)
+            cantA:=cantA+aux
+          sino
+            RecibirMensaje(aux,b2)  
+            cantA:=cantA+aux
+    si cantA<cantB
+      Informar('equipoB ',cantB)
+    sino
+      Informar('equipoA ',cantA)
+  fin
+variables
+  a1,a2,b1,b2:recolector
+  fiscal:fiscalizador
+comenzar
+  AsignarArea(a1,areaA)
+  AsignarArea(a2,areaA)
+  AsignarArea(b1,areaB)
+  AsignarArea(b2,areaB)
+  AsignarArea(a1,area20)
+  AsignarArea(a2,area20)
+  AsignarArea(b1,area20)
+  AsignarArea(b2,area20)
+  AsignarArea(fiscal,areaFiscal)
+  Iniciar(a1,1,1)
+  Iniciar(a2,11,10)
+  Iniciar(b1,13,1)
+  Iniciar(b2,23,10)
+  Iniciar(fiscal,30,1)
+fin

@@ -1,0 +1,73 @@
+programa Escaleras
+procesos
+  proceso contarFlores(ES cantF:numero)
+  comenzar
+    mientras HayFlorEnLaEsquina
+      tomarFlor
+      cantF:=cantF+1
+  fin
+  proceso contarPapeles(ES cantP:numero)
+  comenzar
+    mientras HayPapelEnLaEsquina
+      tomarPapel
+      cantP:=cantP+1
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso subirEscalon(E alt:numero;ES total:numero)
+  variables
+    cantF,cantP:numero
+  comenzar
+    cantF:=0
+    cantP:=0
+    repetir (alt-1)
+      contarFlores(cantF)
+      contarPapeles(cantP)
+      mover
+    contarFlores(cantF)
+    contarPapeles(cantP)
+    si (cantF>cantP)
+      total:=total+1
+    derecha
+    mover
+    izquierda
+  fin
+areas
+  area:AreaC(1,1,100,100)
+robots
+  robot tipo1
+  variables
+    total,num:numero
+  comenzar
+    total:=0
+    repetir 4
+      Random(num,2,6)
+      subirEscalon(num,total)
+    EnviarMensaje(total,robotJefe)
+  fin
+  robot tipoJefe
+  variables
+    cantEsc,cant:numero
+  comenzar
+    cantEsc:=0
+    repetir 3
+      RecibirMensaje(cant,*)
+      cantEsc:=cantEsc+cant
+    Informar(cantEsc)
+  fin
+variables
+  robot1,robot2,robot3:tipo1
+  robotJefe:tipoJefe
+comenzar
+  AsignarArea(robot1,area)
+  AsignarArea(robot2,area)
+  AsignarArea(robot3,area)
+  AsignarArea(robotJefe,area)
+  Iniciar(robot1,2,1)
+  Iniciar(robot2,7,1)
+  Iniciar(robot3,12,1)
+  Iniciar(robotJefe,1,1)
+fin
